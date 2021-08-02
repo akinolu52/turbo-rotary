@@ -18,7 +18,7 @@ router.post("/", async (req, res, next) => {
     }
     // if we don't have conversation id, find a conversation to make sure it doesn't already exist
     let conversation = await Conversation.findConversation(
-      senderId,
+      sender.id,
       recipientId
     );
 
@@ -33,7 +33,7 @@ router.post("/", async (req, res, next) => {
       }
     }
     const message = await Message.create({
-      senderId,
+      senderId: sender.id,
       text,
       conversationId: conversation.id,
     });
