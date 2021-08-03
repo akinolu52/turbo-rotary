@@ -33,7 +33,7 @@ router.post("/", async (req, res, next) => {
       }
     }
     const message = await Message.create({
-      senderId,
+      senderId: sender.id,
       text,
       conversationId: conversation.id,
     });
