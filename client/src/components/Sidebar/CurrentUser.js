@@ -1,9 +1,11 @@
-import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, Typography, Button, ClickAwayListener } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { BadgeAvatar } from "./index";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import { logout } from "../../store/utils/thunkCreators";
+import { clearOnLogout } from "../../store/index";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,20 +31,67 @@ const useStyles = makeStyles(() => ({
     color: "#95A7C4",
     marginRight: 24,
     opacity: 0.5
-  }
+  },
+  dropdownRoot: {
+    position: 'relative',
+  },
+  dropdown: {
+    position: 'absolute',
+    top: -10,
+    right: 0,
+    left: -140,
+    zIndex: 1,
+  },
+  button1: {
+    padding: '.9rem 4rem 1rem',
+    color: '#FFF',
+    backgroundColor: "#3A8DFF",
+    boxShadow: '1px 2px 8px 2px rgba(0, 0, 0, 0.1)',
+    marginTop: '2.2rem'
+  },
 }));
 
 const CurrentUser = (props) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  let { logoutUser, user } = props;
 
-  const user = props.user || {};
+  user = user || {};
+
+  const handleClick = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+
+  const handleLogout = async () => {
+    console.log('yes')
+    await logoutUser(user.id);
+  };
+
 
   return (
     <Box className={classes.root}>
       <BadgeAvatar photoUrl={user.photoUrl} online={true} />
       <Box className={classes.subContainer}>
         <Typography className={classes.username}>{user.username}</Typography>
-        <MoreHorizIcon classes={{ root: classes.ellipsis }} />
+
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <div className={classes.dropdownRoot}>
+            <MoreHorizIcon classes={{ root: classes.ellipsis }} onClick={handleClick} />
+            {open ? (
+              <div className={classes.dropdown}>
+                <Button className={classes.button1}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : null}
+          </div>
+        </ClickAwayListener>
       </Box>
     </Box>
   );
@@ -54,4 +103,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(CurrentUser);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logoutUser: (id) => {
+      dispatch(logout(id));
+      dispatch(clearOnLogout());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentUser);
