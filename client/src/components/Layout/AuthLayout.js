@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
     left: {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundImage: `linear-gradient(to bottom,  #3A8DFF85, #86B9FF85), url(${bgImg})`,
+        backgroundImage: `linear-gradient(to bottom, #2f94f795, #69b4ff), url(${bgImg})`,
+        position: 'relative',
         display: 'flex',
         flexDirection: "column",
         justifyContent: 'center',
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flex: 1,
         },
+
     },
     leftImage: {
         [theme.breakpoints.down('sm')]: {
