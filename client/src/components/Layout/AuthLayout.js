@@ -3,45 +3,64 @@ import { Grid, makeStyles } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import bgImg from '../images/bg-img.png';
-import bubble from '../images/bubble.svg';
+import bgImg from '../../images/bg-img.png';
+import bubble from '../../images/bubble.svg';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         minHeight: '100vh',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        },
     },
     left: {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundImage:
-            `linear-gradient(to bottom,  #3A8DFF85, #86B9FF85),
-      url(${bgImg})`,
+        backgroundImage: `linear-gradient(to bottom,  #3A8DFF85, #86B9FF85), url(${bgImg})`,
         display: 'flex',
         flexDirection: "column",
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flex: 1,
+        },
+    },
+    leftImage: {
+        [theme.breakpoints.down('sm')]: {
+            width: '3rem',
+        },
+        [theme.breakpoints.down('xs')]: {
+            marginTop: '1rem'
+        },
     },
     tagline: {
         color: 'white',
         textAlign: 'center',
         marginTop: '20px',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1.7rem'
+        },
+        [theme.breakpoints.down('xs')]: {
+            fontSize: '1.2rem',
+            marginBottom: '1rem'
+        },
     },
     right: {
         position: 'relative',
         display: 'flex',
         padding: '2rem 6rem',
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    rightHeader: {
-        justifyContent: 'flex-end',
         alignItems: 'center',
-    },
-    rightHeaderContent: {
-        position: "absolute",
-        right: '4rem',
-        top: '2rem'
+        [theme.breakpoints.down('sm')]: {
+            padding: '1.5rem 3rem',
+            flex: 3,
+            flexDirection: 'column-reverse',
+            justifyContent: 'flex-end',
+        },
+        [theme.breakpoints.down('xs')]: {
+            padding: '1.2rem 1.5rem'
+        },
     },
     button1: {
         padding: '.9rem 4rem 1rem',

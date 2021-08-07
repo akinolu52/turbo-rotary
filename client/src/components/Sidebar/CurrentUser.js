@@ -54,9 +54,7 @@ const useStyles = makeStyles(() => ({
 const CurrentUser = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  let { logoutUser, user } = props;
-
-  user = user || {};
+  const { logoutUser, user = {} } = props;
 
   const handleClick = () => {
     setOpen((prev) => !prev);
@@ -67,10 +65,8 @@ const CurrentUser = (props) => {
   };
 
   const handleLogout = async () => {
-    console.log('yes')
     await logoutUser(user.id);
   };
-
 
   return (
     <Box className={classes.root}>
@@ -81,7 +77,7 @@ const CurrentUser = (props) => {
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className={classes.dropdownRoot}>
             <MoreHorizIcon classes={{ root: classes.ellipsis }} onClick={handleClick} />
-            {open ? (
+            {open && (
               <div className={classes.dropdown}>
                 <Button className={classes.button1}
                   onClick={handleLogout}
@@ -89,7 +85,7 @@ const CurrentUser = (props) => {
                   Logout
                 </Button>
               </div>
-            ) : null}
+            )}
           </div>
         </ClickAwayListener>
       </Box>
