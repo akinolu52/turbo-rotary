@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
-  button: {
-    color: '#FFF',
-    backgroundColor: "#3A8DFF",
+  formButton: {
+    color: theme.palette.white.main,
+    backgroundColor: theme.palette.primary.main,
   },
   labelFocusStyle: {
     fontWeight: 'bold',
@@ -81,7 +81,7 @@ const Login = (props) => {
                 type="submit"
                 variant="contained"
                 size="large"
-                className={classes.button}
+                className={classes.formButton}
               />
             </Box>
           </Grid>

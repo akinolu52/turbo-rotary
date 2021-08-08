@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, Button, ClickAwayListener } from "@material-ui/core";
+import { Grid, Box, Typography, Button, ClickAwayListener } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { BadgeAvatar } from "./index";
@@ -75,18 +75,18 @@ const CurrentUser = (props) => {
         <Typography className={classes.username}>{user.username}</Typography>
 
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className={classes.dropdownRoot}>
+          <Grid className={classes.dropdownRoot}>
             <MoreHorizIcon classes={{ root: classes.ellipsis }} onClick={handleClick} />
             {open && (
-              <div className={classes.dropdown}>
+              <Box className={classes.dropdown}>
                 <Button className={classes.button1}
                   onClick={handleLogout}
                 >
                   Logout
                 </Button>
-              </div>
+              </Box>
             )}
-          </div>
+          </Grid>
         </ClickAwayListener>
       </Box>
     </Box>

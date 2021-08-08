@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: '1rem'
         },
     },
-    button: {
+    headerButton: {
         color: '#3A8DFF',
     },
     title: {
@@ -59,7 +59,7 @@ const TopAction = ({ title, buttonText, buttonAction }) => {
             <Grid container item className={classes.rightHeader}>
                 <Typography className={classes.topActionText}>{title}</Typography>
 
-                <Button onClick={buttonAction} className={classes.button} title={buttonText} />
+                <Button onClick={buttonAction} className={classes.headerButton} title={buttonText} />
             </Grid>
         </Box>
     );

@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
             flexDirection: 'column'
         },
     },
-    left: {
+    sidebar: {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundImage: `linear-gradient(to bottom, #2f94f795, #69b4ff), url(${bgImg})`,
@@ -26,9 +26,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flex: 1,
         },
-
     },
-    leftImage: {
+    sidebarImage: {
         [theme.breakpoints.down('sm')]: {
             width: '3rem',
         },
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: '1rem'
         },
     },
-    right: {
+    content: {
         position: 'relative',
         display: 'flex',
         padding: '2rem 6rem',
@@ -64,32 +63,6 @@ const useStyles = makeStyles((theme) => ({
             padding: '1.2rem 1.5rem'
         },
     },
-    button1: {
-        padding: '.9rem 4rem 1rem',
-        color: '#3A8DFF',
-        boxShadow: '1px 2px 8px 2px rgba(0, 0, 0, 0.1)'
-    },
-    button2: {
-        padding: '.9rem 4rem 1rem',
-        color: '#FFF',
-        backgroundColor: "#3A8DFF",
-        boxShadow: '1px 2px 8px 2px rgba(0, 0, 0, 0.1)',
-        marginTop: '2.2rem'
-    },
-    mr: {
-        marginRight: '1.5rem'
-    },
-    title: {
-        fontSize: '2.2rem',
-        fontWeight: 'bold',
-        marginBottom: '2rem',
-    },
-    input: {
-        width: '90%',
-    },
-    floatingLabelFocusStyle: {
-        fontWeight: 'bold',
-    }
 }));
 
 const Layout = (props) => {
@@ -102,11 +75,11 @@ const Layout = (props) => {
 
     return (
         <Grid container justifyContent="center" className={classes.container}>
-            <Grid item xs={false} md={5} className={classes.left}>
-                <img src={bubble} alt="bubble" className={classes.leftImage} />
+            <Grid item xs={false} md={5} className={classes.sidebar}>
+                <img src={bubble} alt="bubble" className={classes.sidebarImage} />
                 <h1 className={classes.tagline}>Converse with anyone with any language</h1>
             </Grid>
-            <Grid item xs={12} md={7} className={classes.right}>
+            <Grid item xs={12} md={7} className={classes.content}>
                 {props.children}
             </Grid>
         </Grid>
