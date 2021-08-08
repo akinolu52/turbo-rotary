@@ -1,19 +1,40 @@
 import React from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  FormControl,
-  TextField,
-} from "@material-ui/core";
+import { Grid, Box, Typography, InputAdornment, makeStyles } from "@material-ui/core";
 import { login } from "./store/utils/thunkCreators";
+import { AuthLayout, Button, TopAction, Title, Input } from './components/Layout';
+
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    flex: 1,
+    [theme.breakpoints.down('sm')]: {
+      flex: 0,
+      width: '95%',
+    },
+  },
+  buttonContainer: {
+    width: '90%',
+    textAlign: 'center',
+    marginTop: '2.2rem',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  formButton: {
+    color: theme.palette.white.main,
+    backgroundColor: theme.palette.primary.main,
+  },
+  labelFocusStyle: {
+    fontWeight: 'bold',
+    color: 'gray'
+  }
+}));
 
 const Login = (props) => {
+  const classes = useStyles();
   const history = useHistory();
-  const { user, login } = props;
+  const { login } = props;
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -23,53 +44,51 @@ const Login = (props) => {
     await login({ username, password });
   };
 
-  if (user.id) {
-    return <Redirect to="/home" />;
-  }
-
   return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
+    <AuthLayout>
+      <TopAction
+        title="Dont have an account?"
+        buttonText="Create account"
+        buttonAction={() => history.push("/register")}
+      />
+      <Box className={classes.formContainer}>
+        <Title title="Welcome back!" />
+
         <form onSubmit={handleLogin}>
           <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
-            </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
+            <Input
+              aria-label="username"
+              label="Username"
+              name="username"
+            />
+            <Input
+              aria-label="password"
+              label="Password"
+              type="password"
+              name="password"
+              inputProps={{ minLength: 6 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end' className={classes.labelFocusStyle}>
+                    <Typography>Forgot Password?</Typography>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Box className={classes.buttonContainer}>
+              <Button
+                title="Login"
+                type="submit"
+                variant="contained"
+                size="large"
+                className={classes.formButton}
               />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
+            </Box>
           </Grid>
         </form>
       </Box>
-    </Grid>
+    </AuthLayout>
   );
-};
-
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -80,4 +99,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

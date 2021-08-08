@@ -1,116 +1,90 @@
-import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  FormControl,
-  TextField,
-  FormHelperText,
-} from "@material-ui/core";
+import { Grid, Box, makeStyles, } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
+import { AuthLayout, Button, TopAction, Title, Input } from './components/Layout';
 
-const Login = (props) => {
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    flex: 1,
+    [theme.breakpoints.down('sm')]: {
+      flex: 0,
+      width: '95%',
+    },
+  },
+  buttonContainer: {
+    width: '90%',
+    textAlign: 'center',
+    marginTop: '2.2rem',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  formButton: {
+    color: theme.palette.white.main,
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
+const Register = (props) => {
+  const classes = useStyles();
   const history = useHistory();
-  const { user, register } = props;
-  const [formErrorMessage, setFormErrorMessage] = useState({});
+
+  const { register } = props;
 
   const handleRegister = async (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-
-    if (password !== confirmPassword) {
-      setFormErrorMessage({ confirmPassword: "Passwords must match" });
-      return;
-    }
 
     await register({ username, email, password });
   };
 
-  if (user.id) {
-    return <Redirect to="/home" />;
-  }
-
   return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
+    <AuthLayout>
+      <TopAction
+        title="Already have an account?"
+        buttonText="Login"
+        buttonAction={() => history.push("/login")}
+      />
+      <Box className={classes.formContainer}>
+        <Title title="Create an account." />
         <form onSubmit={handleRegister}>
           <Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
-                  name="email"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  aria-label="password"
-                  label="Password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="password"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
+            <Input
+              aria-label="username"
+              label="Username"
+              name="username"
+            />
+            <Input
+              label="E-mail address"
+              aria-label="e-mail address"
+              type="email"
+              name="email"
+            />
+            <Input
+              aria-label="password"
+              label="Password"
+              type="password"
+              name="password"
+              inputProps={{ minLength: 6 }}
+            />
+            <Box className={classes.buttonContainer}>
+              <Button
+                title="Create"
+                type="submit"
+                variant="contained"
+                size="large"
+                className={classes.formButton}
+              />
+            </Box>
           </Grid>
         </form>
       </Box>
-    </Grid>
+    </AuthLayout>
   );
-};
-
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -121,4 +95,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Register);
