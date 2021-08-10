@@ -11,19 +11,25 @@ const useStyles = makeStyles((theme) => ({
     },
     floatingLabelFocusStyle: {
         fontWeight: 'bold',
-    }
+    },
+    root: {
+        'input, label': {
+            paddingLeft: '.3rem',paddingRight: '.3rem'
+        },
+    },
 }));
 
 const Input = ({ type, ...args }) => {
     const classes = useStyles();
 
     return (
-        <Grid>
+        <Grid className={classes.root}>
             <FormControl margin="normal" className={classes.input}>
                 <TextField
                     {...args}
                     type={type || 'text'}
                     required
+                    className={classes.textfield}
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}

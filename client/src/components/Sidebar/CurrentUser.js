@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
     left: -140,
     zIndex: 1,
   },
-  button1: {
+  button: {
     padding: '.9rem 4rem 1rem',
     color: '#FFF',
     backgroundColor: "#3A8DFF",
@@ -79,9 +79,7 @@ const CurrentUser = (props) => {
             <MoreHorizIcon classes={{ root: classes.ellipsis }} onClick={handleClick} />
             {open && (
               <Box className={classes.dropdown}>
-                <Button className={classes.button1}
-                  onClick={handleLogout}
-                >
+                <Button className={classes.button} onClick={handleLogout}>
                   Logout
                 </Button>
               </Box>
