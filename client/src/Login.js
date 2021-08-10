@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
   labelFocusStyle: {
     fontWeight: 'bold',
-    color: 'gray'
+    fontSize: '0.9rem',
+    color: theme.palette.primary.main,
   }
 }));
 
@@ -69,8 +70,8 @@ const Login = (props) => {
               inputProps={{ minLength: 6 }}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position='end' className={classes.labelFocusStyle}>
-                    <Typography>Forgot Password?</Typography>
+                  <InputAdornment position='end'>
+                    <Typography className={classes.labelFocusStyle}>Forgot?</Typography>
                   </InputAdornment>
                 ),
               }}
