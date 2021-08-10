@@ -6,7 +6,6 @@ const useStyles = makeStyles(() => ({
         padding: '.9rem 4rem 1rem',
         color: '#3A8DFF',
         boxShadow: '1px 2px 8px 2px rgba(0, 0, 0, 0.1)',
-        fontFamily: "'Montserrat', sans-serif"
     },
 }));
 
