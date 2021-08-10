@@ -72,6 +72,10 @@ export const logout = (id) => async (dispatch) => {
 export const fetchConversations = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
+    for (let index = 0; index < data.length; index++) {
+      const { messages } = data[index];
+      messages?.sort((a, b) => new Date(a?.createdAt) - new Date(b?.createdAt));
+    }
     dispatch(gotConversations(data));
   } catch (error) {
     console.error(error);
