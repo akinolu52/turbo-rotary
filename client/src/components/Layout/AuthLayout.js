@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     sidebar: {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundImage: `linear-gradient(to bottom, #2f94f795, #69b4ff), url(${bgImg})`,
+        backgroundImage: `linear-gradient(180deg, #3A8DFF95 0%, #86B9FF 100%), url(${bgImg})`,
         position: 'relative',
         display: 'flex',
         flexDirection: "column",
@@ -38,19 +38,22 @@ const useStyles = makeStyles((theme) => ({
     tagline: {
         color: 'white',
         textAlign: 'center',
-        marginTop: '20px',
+        marginTop: '35px',
+        width: '67%',
         [theme.breakpoints.down('sm')]: {
-            fontSize: '1.7rem'
+            fontSize: '1.7rem',
+            marginTop: '20px',
         },
         [theme.breakpoints.down('xs')]: {
             fontSize: '1.2rem',
-            marginBottom: '1rem'
+            marginBottom: '1rem',
+            width: '90%',
         },
     },
     content: {
         position: 'relative',
         display: 'flex',
-        padding: '2rem 6rem',
+        padding: '2rem 7rem',
         justifyContent: 'center',
         alignItems: 'center',
         [theme.breakpoints.down('sm')]: {
