@@ -2,10 +2,9 @@ import React, { createRef, Component } from "react";
 import { FormControl, LinearProgress, Box, FilledInput, Input as Inp } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage, myInterceptor } from "../../store/utils/thunkCreators";
+import { postMessage, uploadImage } from "../../store/utils/thunkCreators";
 import emoji from '../../images/emoji.svg';
 import file from '../../images/file.svg';
-import axios from "axios";
 
 const styles = {
   root: {
@@ -36,9 +35,6 @@ class Input extends Component {
     super(props);
     this.state = {
       text: "",
-      uploadedCount: 0,
-      totalFilesCount: 0,
-      progress: null
     };
     this.inputFileRef = createRef();
   }
@@ -61,11 +57,8 @@ class Input extends Component {
     let files = event.target.files;
 
     if (files) {
-      this.setState({ totalFilesCount: files.length })
-      const imagesUrl = await this.uploadImage(files);
-      this.setState({ uploadedCount: 0, progress: null });
-
-      reqBody.attachments = imagesUrl;
+      await this.props.uploadImage(files);
+      reqBody.attachments = this.props.imagesUrl;
     }
     await this.props.postMessage(reqBody);
     this.setState({
@@ -77,47 +70,15 @@ class Input extends Component {
     this.inputFileRef.current.click();
   }
 
-  uploadImage = async (files) => {
-    const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-    const formData = new FormData();
-
-    let imagesUrl = [];
-
-    for (let index = 0; index < files.length; index++) {
-      this.setState({ uploadedCount: index + 1 });
-      const file = files[index];
-      formData.append("file", file);
-      formData.append("upload_preset", `${uploadPreset}`);
-
-      try {
-        const el = this;
-        await axios.interceptors.request.eject(myInterceptor);
-        const { data } = await axios.post(url, formData, {
-          onUploadProgress: function (progressEvent) {
-            const { loaded, total } = progressEvent;
-            const progress = Math.floor((loaded / total) * 100);
-
-            el.setState({ progress });
-          },
-        });
-        imagesUrl.push(data.url);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    return imagesUrl;
-  };
-
   render() {
-    const { classes } = this.props;
-    const { text, uploadedCount, totalFilesCount, progress } = this.state;
+    const { classes, uploadedCount, totalImageCount, complete } = this.props;
+    const { text } = this.state;
+    const progress = (uploadedCount / totalImageCount) * 100;
+
     return (
       <form className={classes.root} onSubmit={this.handleSubmit}>
         <FormControl fullWidth hiddenLabel>
-          {progress && (
+          {uploadedCount && !complete && (
             <Box px="0.4rem" pb="1rem">
               <LinearProgress variant="determinate" value={progress} />
             </Box>
@@ -125,8 +86,8 @@ class Input extends Component {
           <FilledInput
             classes={{ root: classes.input }}
             disableUnderline
-            disabled={uploadedCount !== 0}
-            placeholder={uploadedCount ? `Uploading images: ${uploadedCount} of ${totalFilesCount}` : "Type something..."}
+            disabled={uploadedCount && !complete}
+            placeholder={uploadedCount && !complete ? `Uploading images: ${uploadedCount} of ${totalImageCount}` : "Type something..."}
             value={text}
             name="text"
             onChange={this.handleChange}
@@ -153,9 +114,15 @@ class Input extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { imagesUrl, uploadedCount, totalImageCount, complete } = state.image;
+
   return {
     user: state.user,
     conversations: state.conversations,
+    complete,
+    imagesUrl,
+    uploadedCount,
+    totalImageCount
   };
 };
 
@@ -163,6 +130,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
+    },
+    uploadImage: (images) => {
+      return Promise.resolve(dispatch(uploadImage(images)));
     },
   };
 };

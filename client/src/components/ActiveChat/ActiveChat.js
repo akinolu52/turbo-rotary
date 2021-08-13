@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     flexGrow: 1,
     justifyContent: "space-between",
+    height: '85vh',
     overflowY: 'scroll'
   }
 }));

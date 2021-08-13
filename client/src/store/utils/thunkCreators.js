@@ -6,12 +6,19 @@ import {
   setNewMessage,
   setSearchedUsers,
 } from "../conversations";
+import {
+  setImageUrls,
+  clearImageUrls,
+  setUploadedCount,
+  setTotalImageCount
+} from '../image';
 import { gotUser, setFetchingStatus } from "../user";
 
-export const myInterceptor = axios.interceptors.request.use(async function (config) {
-  const token = await localStorage.getItem("messenger-token");
-  config.headers["x-access-token"] = token;
-
+axios.interceptors.request.use(async function (config) {
+  if (!config.url.includes('cloudinary')) {
+    const token = await localStorage.getItem("messenger-token");
+    config.headers["x-access-token"] = token;
+  }
   return config;
 });
 
@@ -75,7 +82,7 @@ export const fetchConversations = () => async (dispatch) => {
     data.forEach(element => {
       element?.messages?.sort((a, b) =>
         new Date(a?.createdAt) - new Date(b?.createdAt
-      ));
+        ));
     });
     dispatch(gotConversations(data));
   } catch (error) {
@@ -121,4 +128,42 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+// IMAGE THUNK CREATORS
+const imageUpload = async file => {
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", `${uploadPreset}`);
+
+  try {
+    const { data } = await axios.post(url, formData);
+    return data.url;
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const uploadImage = (files) => async (dispatch) => {
+  const imageLength = files.length;
+  let imagesUrl = [];
+  let promises = [];
+
+  dispatch(clearImageUrls());
+  dispatch(setTotalImageCount(imageLength))
+
+  for (let index = 0; index < imageLength; index++) {
+    await promises.push(imageUpload(files[index]));
+    await dispatch(setUploadedCount(index + 1));
+  }
+
+  return Promise.all(promises)
+    .then(results => imagesUrl = results)
+    .catch(err => console.error(err))
+    .finally(() => dispatch(setImageUrls(imagesUrl)));
 };

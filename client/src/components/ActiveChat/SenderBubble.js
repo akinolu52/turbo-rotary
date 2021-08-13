@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, ImageList, ImageListItem } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,18 +23,38 @@ const useStyles = makeStyles(() => ({
   },
   bubble: {
     background: "#F4F6FA",
-    borderRadius: "10px 10px 0 10px"
+    borderRadius: "10px 10px 0 10px",
+  },
+  imageList: {
+    width: 250,
+    height: 125,
+    marginRight: '.2rem',
+  },
+  image: {
+    borderRadius: "10px",
+    width: '100%'
   }
 }));
 
 const SenderBubble = (props) => {
   const classes = useStyles();
-  const { time, text } = props;
+  const { time, text, attachments = [] } = props;
   return (
     <Box className={classes.root}>
       <Typography className={classes.date}>{time}</Typography>
       <Box className={classes.bubble}>
-        <Typography className={classes.text}>{text}</Typography>
+        {attachments.length > 0 && (
+          <ImageList rowHeight={120} className={classes.imageList} gap={8}>
+            {attachments.map((img, index) => (
+              <ImageListItem key={index} >
+                <img src={img} alt='attachments' className={classes.image} />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}
+        {text && (
+          <Typography className={classes.text}>{text}</Typography>
+        )}
       </Box>
     </Box>
   );
