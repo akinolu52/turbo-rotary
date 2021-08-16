@@ -22,17 +22,22 @@ const useStyles = makeStyles(() => ({
     fontWeight: "bold"
   },
   bubble: {
+    overflow: "hidden",
     background: "#F4F6FA",
     borderRadius: "10px 10px 0 10px",
   },
   imageList: {
-    width: 250,
-    height: 125,
+    borderRadius: "10px 10px 0 10px",
+    maxWidth: 300,
     marginRight: '.2rem',
+  },
+  imageListIitem: {
+    width: '100% !important',
   },
   image: {
     borderRadius: "10px",
-    width: '100%'
+    width: '100%',
+    height: '100%',
   }
 }));
 
@@ -42,11 +47,11 @@ const SenderBubble = (props) => {
   return (
     <Box className={classes.root}>
       <Typography className={classes.date}>{time}</Typography>
-      <Box className={classes.bubble}>
+      <Box className={classes.bubble} col={attachments.length}>
         {attachments.length > 0 && (
-          <ImageList rowHeight={120} className={classes.imageList} gap={8}>
+          <ImageList rowHeight={120} className={classes.imageList} col={attachments.length} gap={8}>
             {attachments.map((img, index) => (
-              <ImageListItem key={index} >
+              <ImageListItem key={index} className={attachments.length < 2 ? classes.imageListIitem : null}>
                 <img src={img} alt='attachments' className={classes.image} />
               </ImageListItem>
             ))}
